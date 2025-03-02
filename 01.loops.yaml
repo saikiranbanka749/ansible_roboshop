@@ -1,0 +1,13 @@
+- name: install packages
+  hosts: localhost
+  become: yes
+  tasks:
+  - name: install git,tree
+    ansible.builtin.package:
+     name: "{{item}}"
+     state: present
+    loop:
+    - git
+    - vim
+    - tree
+    - unzip

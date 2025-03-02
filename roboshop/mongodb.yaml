@@ -1,0 +1,30 @@
+- name: mongodb
+  hosts: localhost
+  become: yes
+  tasks:
+  - name: copy the mongo repo
+    ansible.builtin.copy:
+     src: mongodb.repo
+     dest: /etc/yum.repos.d/mongodb.repo
+  - name: install mongodb
+    ansible.builtin.package:
+     name: mongo-org
+     state: present
+  - name: mongodb started and enabled
+    ansible.builtin.service:
+     name: mongodb 
+     state: started
+     enabled: yes
+  - name: edit the file
+    ansible.builtin.replace:
+     path: /etc/mongod.conf
+     regexp: '127.0.0.1'
+     replace: '0.0.0.0' 
+     ignore: false  
+  - name: restart mongod
+    ansible.builtin.service:
+     name: mongodb
+     state: restarted
+  - name: print message
+    ansible.builtin.debug:
+     msg: "ignore the failed tasks:"

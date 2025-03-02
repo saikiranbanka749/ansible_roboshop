@@ -1,0 +1,19 @@
+- name: 
+  hosts: localhost
+  become: yes
+  tasks:
+  - name: print name
+    ansible.builtin.debug:
+     msg: "My self saikiran"
+    tags:
+    - name
+  - name: print course
+    ansible.builtin.debug:
+     msg: "I know devops"
+    tags:
+    - course
+  - name: experience
+    ansible.builtin.debug:
+     msg: "I have 3 years experience"
+    tags:
+    - experience

@@ -1,0 +1,60 @@
+- name: shipping the item
+  hosts: localhost
+  become: yes
+  tasks:
+  - name: install maven
+    ansible.builtin.package:
+      name: maven
+      state: present
+  - name: user add
+    ansible.builtin.user:
+      name: roboshop
+  - name: remove app directory
+    ansible.builtin.file:
+      path: /app
+      state: absent
+  - name: create app directory
+    ansible.builtin.file:
+      path: /app
+      state: directory
+  - name: download the shipping build file
+    ansible.builtin.get_url:
+      url: https://roboshop-builds.s3.amazonaws.com/shipping.zip
+      dest: /tmp
+  - name: extract shipping service
+    ansible.builtin.unarchive:
+      src: /tmp/shipping.zip
+      dest: /app
+      remote_src: true
+  - name: create jar file
+    ansible.builtin.command: mvn clean package
+    args:
+      chdir: /app
+  - name: rename the jar file
+    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
+    args:
+      chdir: /app
+  - name: copy the shipping service file
+    ansible.builtin.copy:
+      src: shipping.service
+      dest: /etc/systemd/system/shipping.service
+  - name: daemon daemon_reload
+    ansible.builtin.service:
+      daemon_reload: true
+  - name: shipping start and enable
+    ansible.builtin.service:
+      name: shipping
+      state: started
+      enabled: yes
+  - name: install mysql
+    ansible.builtin.dnf:
+      name: mysql
+      state: present
+  - name: load cities data
+    ansible.builtin.shell: "mysql -h mysql.daws76s.online -uroot -p{{mysql_password}}  < /app/schema/shipping.sql"
+    when: schema.stdout != "1"
+  - name: restart shipping
+    ansible.builtin.service:
+      name: shipping
+      state: restarted
+      enabled: yes

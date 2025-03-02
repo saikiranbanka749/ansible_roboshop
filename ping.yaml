@@ -1,0 +1,6 @@
+- name: communicate 
+  hosts: web
+  become: yes
+  tasks:
+  - name: server
+    ansible.builtin.ping:

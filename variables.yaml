@@ -1,0 +1,13 @@
+- name: variables
+  hosts: localhost
+  become: yes
+  vars:
+    course: aws
+    trainer: saikiran
+    duration: 10hrs
+  tasks:
+  - name: data
+    vars:
+      trainer: banka
+    ansible.builtin.debug:
+     msg: "course is {{course}}, trainer is {{trainer}},duration is {{trainer}}"

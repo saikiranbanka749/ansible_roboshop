@@ -1,0 +1,22 @@
+- name: datatypes
+  hosts: localhost
+  become: yes
+  vars:
+  - NAME: saikiran
+    skills:
+    - aws
+    - devops
+    - docker
+    - kubernets
+    - ansible
+    experience:
+     aws: 3
+     devops: 2
+     docker: 2
+     kubernets: 2
+     ansible: 4
+    Trainer: true
+  tasks:
+  - name: checking the datatypes
+    ansible.builtin.debug:
+     msg: "my self {{NAME}}, I knows {{skills}}, i have {{experience}},yes I have {{Trainer}}"

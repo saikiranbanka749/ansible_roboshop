@@ -1,0 +1,41 @@
+- name: Install Redis on Ubuntu
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Install CA certificates
+      ansible.builtin.apt:
+        name: ca-certificates
+        state: latest
+        update_cache: yes
+
+    - name: Install prerequisites
+      ansible.builtin.apt:
+        name: software-properties-common
+        state: present
+
+    #- name: Add Redis PPA without SSL verification
+     # ansible.builtin.shell: |
+        #sudo add-apt-repository -y ppa:redislabs/redis || true
+      #args:
+   #     warn: false
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install Redis
+      ansible.builtin.apt:
+        name: redis-server
+        state: present
+
+    - name: Allow remote connections
+      ansible.builtin.replace:
+        path: /etc/redis/redis.conf
+        regexp: '^bind 127.0.0.1'
+        replace: 'bind 0.0.0.0'
+
+    - name: Restart and enable Redis
+      ansible.builtin.service:
+        name: redis-server
+        state: restarted
+        enabled: yes

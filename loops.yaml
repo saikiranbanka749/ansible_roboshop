@@ -1,0 +1,12 @@
+- name: loops
+  hosts: localhost
+  become: yes
+  tasks:
+  - name: created users
+    ansible.builtin.debug:
+     msg: "users are: {{item}}"
+    loop:
+    - sai
+    - kiran
+    - anil
+    - balu
