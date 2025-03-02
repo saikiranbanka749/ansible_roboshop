@@ -1,0 +1,11 @@
+MONGODB_HOST: localhost
+CATALOGUE_HOST: localhost
+CART_HOST: localhost
+REDIS_HOST: localhost
+RABBITMQ_HOST: localhost
+MYSQL_HOST: localhost
+USER_HOST: localhost
+PAYMENT_HOST: localhost
+SHIPPING_HOST: localhost
+DISPATCH_HOST: localhost
+WEB_HOST: localhost
